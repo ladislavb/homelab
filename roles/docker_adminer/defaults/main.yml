@@ -1,0 +1,6 @@
+---
+docker_adminer_name: adminer
+docker_adminer_image: 'adminer'
+docker_adminer_memory: "64m"
+docker_adminer_default_server: "mariadb"
+docker_adminer_proxy_hostname: "adminer.{{ acme_domain }}"
