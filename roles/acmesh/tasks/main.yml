@@ -1,0 +1,54 @@
+---
+- name: Installing acme.sh
+  shell: wget -O - https://get.acme.sh | sh -s email={{ acme_email }}
+  args:
+    creates: "/root/.acme.sh"
+    warn: False
+
+- name: Enabling auto upgrade for acme.sh
+  lineinfile:
+    dest: /root/.acme.sh/account.conf
+    regexp: "^#?AUTO_UPGRADE"
+    line: 'AUTO_UPGRADE="1"'
+
+- name: Create ssl directory
+  file:
+    path: "{{ acmesh_dir }}"
+    state: directory
+    recurse: yes
+
+- name: Create reload script from specific template
+  template:
+    src: "{{ acmesh_reload_template }}.j2"
+    dest: "/root/acmesh_reload.sh"
+    mode: 0775
+  when: acmesh_reload_template != None
+
+- name: Create reload script from default template
+  template:
+    src: "default.j2"
+    dest: "/root/acmesh_reload.sh"
+    mode: 0775
+  when: acmesh_reload_template = None
+
+- name: Issuing wildcard cert for {{ acme_domain }}
+  shell: '/root/.acme.sh/acme.sh --issue --dns dns_cf -d {{ acme_domain }} -d *.{{ acme_domain }}'
+  environment:
+    CF_Token: "{{ acme_dns_cf_token }}"
+    CF_Account_ID: "{{ acme_dns_cf_account }}"
+  args:
+    creates: /root/.acme.sh/{{ acme_domain }}/ca.cer
+    warn: False
+  register: acme_issue_result
+  failed_when: acme_issue_result.rc == 1
+
+- name: Deploying cert
+  shell: |
+    /root/.acme.sh/acme.sh --install-cert -d {{ acme_domain }} -d *.{{ acme_domain }} \
+      --fullchain-file {{ acmesh_dir }}/{{ acme_domain }}_fullchain.pem \
+      --key-file       {{ acmesh_dir }}/{{ acme_domain }}_key.pem \
+      --reloadcmd     "/root/acmesh_reload.sh"
+  args:
+    warn: False
+  register: acme_install_result
+  failed_when: acme_install_result.rc != 0
