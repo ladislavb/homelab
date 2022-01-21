@@ -1,0 +1,108 @@
+---
+- name: Creating MariaDB data directory
+  file:
+    path: "{{ docker_photoprism_mariadb_mount_data }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+
+- name: Create MariaDB container
+  docker_container:
+    docker_host: unix://var/run/docker.sock
+    detach: yes
+    name: "{{ docker_photoprism_mariadb_name }}"
+    image: "{{ docker_photoprism_mariadb_image }}"
+    pull: yes
+    recreate: yes
+    container_default_behavior: "no_defaults"
+    memory: "{{ docker_photoprism_mariadb_memory }}"
+    log_driver: fluentd
+    log_options:
+      tag: "log.local.docker.{{ docker_photoprism_mariadb_name }}"
+      fluentd-async: "true"
+    env:
+      TZ: "{{ homelab_timezone }}"
+      PUID: "{{ docker_uid }}"
+      PGID: "{{ docker_gid }}"
+      MYSQL_ROOT_PASSWORD: "{{ docker_photoprism_mariadb_password }}"
+      MYSQL_DATABASE: "{{ docker_photoprism_mariadb_db }}"
+      MYSQL_USER: "{{ docker_photoprism_mariadb_user }}"
+      MYSQL_PASSWORD: "{{ docker_photoprism_mariadb_password }}"
+    network_mode: bridge
+    networks:
+      - name: "{{ docker_network }}"
+    volumes:
+      - "{{ docker_photoprism_mariadb_mount_data }}:/config"
+    restart_policy: unless-stopped
+    state: present
+
+- name: Start MariaDB container
+  docker_container:
+    name: "{{ docker_photoprism_mariadb_name }}"
+    container_default_behavior: "no_defaults"
+    state: started
+
+- name: Creating PhotoPrism storage directory
+  file:
+    path: "{{ docker_photoprism_mount_storage }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+
+- name: Create PhotoPrism container
+  docker_container:
+    docker_host: unix://var/run/docker.sock
+    detach: yes
+    name: "{{ docker_photoprism_name }}"
+    image: "{{ docker_photoprism_image }}"
+    pull: yes
+    recreate: yes
+    container_default_behavior: "no_defaults"
+    memory: "{{ docker_photoprism_memory }}"
+    log_driver: fluentd
+    log_options:
+      tag: "log.local.docker.{{ docker_photoprism_name }}"
+      fluentd-async: "true"
+    env:
+      PHOTOPRISM_UID: "{{ docker_uid }}"
+      PHOTOPRISM_GID: "{{ docker_gid }}"
+      # MySQL
+      PHOTOPRISM_DATABASE_DRIVER: "mysql"
+      PHOTOPRISM_DATABASE_SERVER: "{{ docker_photoprism_mariadb_name }}"
+      PHOTOPRISM_DATABASE_NAME: "{{ docker_photoprism_mariadb_db }}"
+      PHOTOPRISM_DATABASE_USER: "{{ docker_photoprism_mariadb_user }}"
+      PHOTOPRISM_DATABASE_PASSWORD: "{{ docker_photoprism_mariadb_password }}"
+      # App settings
+      PHOTOPRISM_SITE_URL: "https://{{ docker_photoprism_proxy_hostname }}"
+      PHOTOPRISM_SITE_TITLE: "{{ docker_photoprism_site_title }}"
+      PHOTOPRISM_APP_NAME: "{{ docker_photoprism_app_name }}"
+      PHOTOPRISM_ADMIN_PASSWORD: "{{ docker_photoprism_admin_password }}"
+      PHOTOPRISM_DISABLE_SETTINGS: "false"
+      PHOTOPRISM_PUBLIC: "false"
+      PHOTOPRISM_READONLY: "false"
+      PHOTOPRISM_FACE_SIZE: "30"
+      #PHOTOPRISM_SPONSOR: "true"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.photoprism.entrypoints: "websecure"
+      traefik.http.routers.photoprism.rule: "Host(`{{ docker_photoprism_proxy_hostname }}`)"
+      traefik.http.routers.photoprism.tls: "true"
+      traefik.http.routers.photoprism.tls.certresolver: "le"
+    network_mode: bridge
+    networks:
+      - name: "{{ docker_network }}"
+    volumes:
+      - "{{ docker_photoprism_mount_storage }}:/photoprism/storage"
+      - "{{ docker_photoprism_mount_originals }}:/photoprism/originals"
+    restart_policy: unless-stopped
+    state: present
+
+- name: Start PhotoPrism container
+  docker_container:
+    name: "{{ docker_photoprism_name }}"
+    container_default_behavior: "no_defaults"
+    state: started

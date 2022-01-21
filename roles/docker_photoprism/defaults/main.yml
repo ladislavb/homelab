@@ -1,0 +1,20 @@
+---
+# MariaDB
+docker_photoprism_mariadb_name: photoprism-mariadb
+docker_photoprism_mariadb_image: 'linuxserver/mariadb:10.5.13'
+docker_photoprism_mariadb_memory: "512m"
+docker_photoprism_mariadb_mount_data: "{{ docker_data_basepath }}/photoprism-mariadb"
+docker_photoprism_mariadb_db: "photoprism"
+docker_photoprism_mariadb_user: "photoprism"
+docker_photoprism_mariadb_password: "changeme!"
+
+# PhotoPrism
+docker_photoprism_name: photoprism
+docker_photoprism_image: 'photoprism/photoprism'
+docker_photoprism_memory: "4g"
+docker_photoprism_mount_storage: "{{ docker_data_basepath }}/photoprism"
+docker_photoprism_mount_originals: "/srv/media/Photos"
+docker_photoprism_admin_password: "changeme!"
+docker_photoprism_proxy_hostname: "photoprism.{{ acme_domain }}"
+docker_photoprism_site_title: "PhotoPrism"
+docker_photoprism_app_name: "PhotoPrism"
