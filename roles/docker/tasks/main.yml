@@ -1,0 +1,90 @@
+---
+- name: Removing old docker versions
+  apt:
+    pkg:
+      - docker 
+      - docker-engine 
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+   
+- name: Installing docker-ce dependencies
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+    state: present
+ 
+- name: Adding docker key - Debian
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  when: ansible_lsb.id == 'Debian'
+     
+- name: Constructing docker repository entry for apt configuration - Debian
+  command: bash -c "echo \"deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable\" "
+  register: docker_repo_line
+  when: ansible_lsb.id == 'Debian'
+
+- debug: 
+    msg: "{{ docker_repo_line.stdout }}"
+  when: ansible_lsb.id == 'Debian'
+
+- name: Adding docker repository - Debian
+  apt_repository:
+    repo: "{{ docker_repo_line.stdout }}"
+    state: present
+  when: ansible_lsb.id == 'Debian'
+
+- name: Adding docker key - Ubuntu
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: ansible_lsb.id == 'Ubuntu'
+
+- name: Constructing docker repository entry for apt configuration - Ubuntu
+  command: bash -c "echo \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" "
+  register: docker_repo_line
+  when: ansible_lsb.id == 'Ubuntu'
+ 
+- debug: 
+    msg: "{{ docker_repo_line.stdout }}"
+  when: ansible_lsb.id == 'Ubuntu'
+ 
+- name: Adding docker repository - Ubuntu
+  apt_repository:
+    repo: "{{ docker_repo_line.stdout }}"
+    state: present
+  when: ansible_lsb.id == 'Ubuntu'
+      
+- name: Installing docker-ce
+  apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+    update_cache: yes
+
+- name: Installing Python packages for Docker
+  apt:
+    pkg:
+      - python3-docker
+    state: present
+    update_cache: yes
+
+- name: Creating backend network for docker containers
+  docker_network:
+    name: "{{ docker_network }}"
+
+- name: Creating docker data directory
+  file:
+    path: "{{ docker_data_basepath }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    recurse: yes
