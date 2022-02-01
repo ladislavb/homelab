@@ -1,0 +1,9 @@
+---
+postfix_relay_hostname: "{{ inventory_hostname }}"
+postfix_relay_mynetworks: "127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"
+postfix_relay_smtp_server: mail.example.com
+postfix_relay_smtp_port: 587
+postfix_relay_smtp_from: sender@example.com
+postfix_relay_smtp_auth: false
+postfix_relay_smtp_username: 
+postfix_relay_smtp_password: 

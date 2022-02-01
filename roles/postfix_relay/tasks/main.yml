@@ -1,0 +1,27 @@
+---
+- name: Remove Exim
+  apt:
+    pkg:
+      - exim4-base
+      - exim4-config
+      - exim4-daemon-light
+    state: absent
+    purge: yes
+
+- name: Install Postfix
+  apt:
+    pkg:
+      - postfix
+      - libsasl2-modules
+    state: present
+
+- name: Copy main.cf
+  template:
+    src: main.cf
+    dest: /etc/postfix/main.cf
+    backup: yes
+
+- name: Reload postfix
+  service:
+    name: postfix
+    state: reloaded
