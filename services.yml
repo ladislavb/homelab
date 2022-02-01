@@ -1,0 +1,84 @@
+---
+# -------------------------------------------------------------------------------------------------
+# Groups
+# -------------------------------------------------------------------------------------------------
+
+- hosts: grp_proxmox
+  roles:
+    - role: postfix_relay
+      tags: [ postfix_relay ]
+
+- hosts: grp_baremetal:grp_vm:grp_lxc:grp_cloud_vps
+  roles:
+    - role: logging
+      tags: [ logging ]
+
+- hosts: grp_samba
+  roles:
+    - role: samba
+      tags: [ samba ]
+
+- hosts: grp_haproxy
+  roles:
+    - role: haproxy
+      tags: [ haproxy ]
+
+- hosts: grp_docker
+  roles:
+    - role: docker
+      tags: [ docker ]
+
+- hosts: grp_traefik
+  roles:
+    - role: docker_traefik
+      tags: [ traefik ]
+    - role: docker_whoami
+      tags: [ traefik ]
+
+# -------------------------------------------------------------------------------------------------
+# Individual hosts
+# -------------------------------------------------------------------------------------------------
+
+- hosts: proxmox2.blazcata.cz
+  roles:
+    - role: nut_master
+      tags: [ nut_master ]
+
+# - hosts: proxmox1.blazcata.cz
+#   roles:
+#     - role: nut_slave
+#       tags: [ nut_slave ]
+
+- hosts: spock.blazcata.cz
+  roles:
+    - role: acmesh
+      tags: [ acmesh ]
+    - role: plex
+      tags: [ plex ]
+
+- hosts: kirk.blazcata.cz
+  roles:
+    - role: docker_influxdb2
+      tags: [ influxdb2, soc ]
+    - role: docker_loki
+      tags: [ loki, soc ]
+    - role: docker_grafana
+      tags: [ grafana, soc ]
+
+- hosts: picard.blazcata.cz
+  roles:
+    - role: docker_dashboard
+      tags: [ dashboard ]
+    - role: docker_openhab2
+      tags: [ openhab2 ]
+    - role: docker_download
+      tags: [ download ]
+    - role: docker_calibreweb
+      tags: [ calibreweb ]
+    - role: docker_photoprism
+      tags: [ photoprism ]
+    - role: docker_navidrome
+      tags: [ navidrome ]
+
+- hosts: sisko.blazcata.cz
+  roles:
