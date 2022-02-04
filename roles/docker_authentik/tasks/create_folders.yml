@@ -1,0 +1,16 @@
+---
+- name: Creating Authentik data directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+  with_items:
+    - "{{ docker_authentik_mount_postgresql }}"
+    - "{{ docker_authentik_mount_backups }}"
+    - "{{ docker_authentik_mount_media }}"
+    - "{{ docker_authentik_mount_certs }}"
+    - "{{ docker_authentik_mount_templates }}"
+    - "{{ docker_authentik_mount_geoip }}"

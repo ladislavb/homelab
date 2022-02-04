@@ -1,0 +1,6 @@
+- include: create_folders.yml
+- include: authentik_postgresql.yml
+- include: authentik_redis.yml
+- include: authentik_server.yml
+- include: authentik_worker.yml
+#- include: authentik_geoipupdate.yml

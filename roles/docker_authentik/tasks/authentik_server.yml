@@ -1,0 +1,46 @@
+---
+- name: Create Authentik server container
+  docker_container:
+    docker_host: unix://var/run/docker.sock
+    detach: yes
+    name: "{{ docker_authentik_server_name }}"
+    image: "{{ docker_authentik_server_image }}"
+    command: "server"
+    pull: yes
+    recreate: yes
+    container_default_behavior: "no_defaults"
+    log_driver: fluentd
+    log_options:
+      tag: "log.local.docker.{{ docker_authentik_server_name }}"
+      fluentd-async: "true"
+    env:
+      AUTHENTIK_SECRET_KEY: "{{ docker_authentik_secret_key }}"
+      AK_ADMIN_PASS: "{{ docker_authentik_admin_password }}"
+      AUTHENTIK_REDIS__HOST: "{{ docker_authentik_redis_name }}"
+      AUTHENTIK_POSTGRESQL__HOST: "{{ docker_authentik_postgresql_name }}"
+      AUTHENTIK_POSTGRESQL__USER: "{{ docker_authentik_postgresql_user }}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "{{ docker_authentik_postgresql_password }}"
+      AUTHENTIK_POSTGRESQL__NAME: "{{ docker_authentik_postgresql_db }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.authentik.entrypoints: "websecure"
+      traefik.http.services.authentik.loadbalancer.server.port: "9000"
+      traefik.http.routers.authentik.rule: "Host(`{{ docker_authentik_server_proxy_hostname }}`)"
+      traefik.http.routers.authentik.tls: "true"
+      traefik.http.routers.authentik.tls.certresolver: "le"
+    network_mode: bridge
+    networks:
+      - name: "{{ docker_network }}"
+    volumes:
+      - "{{ docker_authentik_mount_media }}:/media"
+      - "{{ docker_authentik_mount_templates }}:/templates"
+      - "{{ docker_authentik_mount_geoip }}:/geoip"
+    user: "{{ docker_uid }}:{{ docker_gid }}"
+    restart_policy: unless-stopped
+    state: present
+
+- name: Start Authentik server container
+  docker_container:
+    name: "{{ docker_authentik_server_name }}"
+    container_default_behavior: "no_defaults"
+    state: started

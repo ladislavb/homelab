@@ -1,0 +1,41 @@
+---
+- name: Create Authentik worker container
+  docker_container:
+    docker_host: unix://var/run/docker.sock
+    detach: yes
+    name: "{{ docker_authentik_worker_name }}"
+    image: "{{ docker_authentik_worker_image }}"
+    command: "worker"
+    pull: yes
+    recreate: yes
+    container_default_behavior: "no_defaults"
+    log_driver: fluentd
+    log_options:
+      tag: "log.local.docker.{{ docker_authentik_worker_name }}"
+      fluentd-async: "true"
+    env:
+      AUTHENTIK_SECRET_KEY: "{{ docker_authentik_secret_key }}"
+      AUTHENTIK_REDIS__HOST: "{{ docker_authentik_redis_name }}"
+      AUTHENTIK_POSTGRESQL__HOST: "{{ docker_authentik_postgresql_name }}"
+      AUTHENTIK_POSTGRESQL__USER: "{{ docker_authentik_postgresql_user }}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "{{ docker_authentik_postgresql_password }}"
+      AUTHENTIK_POSTGRESQL__NAME: "{{ docker_authentik_postgresql_db }}"
+    network_mode: bridge
+    networks:
+      - name: "{{ docker_network }}"
+    volumes:
+      - "{{ docker_authentik_mount_backups }}:/backups"
+      - "{{ docker_authentik_mount_media }}:/media"
+      - "{{ docker_authentik_mount_certs }}:/certs"
+      - "{{ docker_authentik_mount_templates }}:/templates"
+      - "{{ docker_authentik_mount_geoip }}:/geoip"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    user: "{{ docker_uid }}:{{ docker_gid }}"
+    restart_policy: unless-stopped
+    state: present
+
+- name: Start Authentik worker container
+  docker_container:
+    name: "{{ docker_authentik_worker_name }}"
+    container_default_behavior: "no_defaults"
+    state: started
