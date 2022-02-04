@@ -10,7 +10,7 @@
 
 - name: Determine if Calibre-Web media directory exists
   stat:
-    media_path: "{{ docker_calibreweb_mount_media }}"
+    path: "{{ docker_calibreweb_mount_media }}"
   register: media_path
 
 - name: Create Calibre-Web media directory but don't mess with existing/mounted folder
