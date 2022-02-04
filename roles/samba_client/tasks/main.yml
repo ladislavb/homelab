@@ -2,13 +2,20 @@
   command: uname -r
   register: kernel_version
 
-- name: Installing packages
+- name: Installing cifs-utils
   apt:
     pkg:
       - cifs-utils
+    state: present
+    update_cache: yes
+
+- name: Installing kernel modules extra
+  apt:
+    pkg:
       - "linux-modules-extra-{{ kernel_version.stdout }}"
     state: present
     update_cache: yes
+  when: "'grp_vm' in group_names"
 
 - name: Create local mounts
   file:
@@ -32,6 +39,6 @@
     src: "{{ item.samba_share }}"
     path: "{{ item.local_mount }}"
     fstype: cifs
-    opts: "credentials=/root/.smb_{{ item.name }},iocharset=utf8,vers=3.0,nofail,uid={{ homelab_user_uid }},gid={{ homelab_user_gid }}"
+    opts: "credentials=/root/.smb_{{ item.name }},iocharset=utf8,vers=3.0,nofail,uid={{ homelab_user_uid }},gid={{ homelab_group_gid }}"
     state: mounted
   with_items: "{{ samba_client_shares }}"
