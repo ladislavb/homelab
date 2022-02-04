@@ -1,4 +1,4 @@
 .DS_Store
-secrets.yml
 inventory.yml
-_*
+group_vars/grp_*
+host_vars/*
