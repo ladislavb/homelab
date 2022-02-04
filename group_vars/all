@@ -1,4 +1,7 @@
 ---
+ansible_ssh_user: "homelab"
+ansible_become: yes
+
 homelab_timezone: "Europe/Prague"
 homelab_user: "homelab"
 homelab_user_home: "/home/{{ homelab_user }}"
@@ -6,16 +9,16 @@ homelab_user_uid: "1000"
 homelab_group: "homelab"
 homelab_group_gid: "1000"
 
-acme_email: "nobody@acme.com"
-acme_domain: "acme.com"
-# CloudFlare DNS API
-acme_dns_cf_email: "nobody@acme.com"
-acme_dns_cf_account: "change me!"
-acme_dns_cf_token: "change me!"
-
 docker_user: "{{ homelab_user }}"
 docker_uid: "{{ homelab_user_uid }}"
 docker_group: "{{ homelab_group }}"
 docker_gid: "{{ homelab_group_gid }}"
 docker_network: homelab_net
 docker_data_basepath: "/opt/homelab/docker"
+
+acme_email: "nobody@acme.com"
+acme_domain: "acme.com"
+# CloudFlare DNS API
+acme_dns_cf_email: "nobody@acme.com"
+acme_dns_cf_account: "changeme!"
+acme_dns_cf_token: "changeme!"
