@@ -54,6 +54,11 @@ services:
         icon: "{{ app.icon }}"
         subtitle: "{{ app.subtitle }}"
         tag: "{{ app.tag }}"
+{% if app['tagstyle'] is defined %}
+        tagstyle: "{{ app.tagstyle }}"
+{% else %}
+        tagstyle: "is-small is-success"
+{% endif %}
         url: "{{ app.url }}"
         target: "{{ app.target }}"
 {% endfor %}

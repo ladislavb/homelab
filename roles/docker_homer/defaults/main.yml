@@ -26,6 +26,7 @@ docker_homer_services:
         icon: "fas fa-play"
         subtitle: "Plex"
         tag: "app"
+        tagstyle: "is-small is-primary"
         url: "https://plex.acme.com"
         target: "_blank"
       - name: "Books"
