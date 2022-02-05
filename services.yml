@@ -36,7 +36,34 @@
       tags: [ traefik ]
 
 # -------------------------------------------------------------------------------------------------
-# Individual hosts
+# Proxmox1 (Mac Mini)
+# -------------------------------------------------------------------------------------------------
+
+# - hosts: proxmox1.blazcata.cz
+#   roles:
+#     - role: nut_slave
+#       tags: [ nut_slave ]
+
+# -------------------------------------------------------------------------------------------------
+# Proxmox1 (Mac Mini) - Docker Internal
+# -------------------------------------------------------------------------------------------------
+
+- hosts: kirk.blazcata.cz
+  roles:
+    - role: samba_client
+      tags: [ samba_client ]
+    - role: docker_download
+      tags: [ download ]
+
+# -------------------------------------------------------------------------------------------------
+# Proxmox1 (Mac Mini) - Docker DMZ
+# -------------------------------------------------------------------------------------------------
+
+- hosts: sisko.blazcata.cz
+  roles:
+
+# -------------------------------------------------------------------------------------------------
+# Proxmox2 (NAS)
 # -------------------------------------------------------------------------------------------------
 
 - hosts: proxmox2.blazcata.cz
@@ -44,41 +71,40 @@
     - role: nut_master
       tags: [ nut_master ]
 
-# - hosts: proxmox1.blazcata.cz
-#   roles:
-#     - role: nut_slave
-#       tags: [ nut_slave ]
+# -------------------------------------------------------------------------------------------------
+# Proxmox2 (NAS) - Docker Internal
+# -------------------------------------------------------------------------------------------------
 
-- hosts: spock.blazcata.cz
+- hosts: picard.blazcata.cz
   roles:
-    - role: acmesh
-      tags: [ acmesh ]
-    - role: plex
-      tags: [ plex ]
-
-- hosts: kirk.blazcata.cz
-  roles:
+    - role: samba_client
+      tags: [ samba_client ]
+    - role: docker_dashboard
+      tags: [ dashboard ]
+    - role: docker_openhab2
+      tags: [ openhab2 ]
+    - role: docker_authentik
+      tags: [ authentik ]
     - role: docker_influxdb2
       tags: [ influxdb2, soc ]
     - role: docker_loki
       tags: [ loki, soc ]
     - role: docker_grafana
       tags: [ grafana, soc ]
-
-- hosts: picard.blazcata.cz
-  roles:
-    - role: docker_dashboard
-      tags: [ dashboard ]
-    - role: docker_openhab2
-      tags: [ openhab2 ]
-    - role: docker_download
-      tags: [ download ]
     - role: docker_calibreweb
       tags: [ calibreweb ]
     - role: docker_photoprism
       tags: [ photoprism ]
-    - role: docker_navidrome
-      tags: [ navidrome ]
 
-- hosts: sisko.blazcata.cz
+# -------------------------------------------------------------------------------------------------
+# Proxmox2 (NAS) - LXC Internal - Plex server
+# -------------------------------------------------------------------------------------------------
+
+- hosts: spock.blazcata.cz
   roles:
+    - role: samba_client
+      tags: [ samba_client ]
+    - role: acmesh
+      tags: [ acmesh ]
+    - role: plex
+      tags: [ plex ]
