@@ -15,6 +15,8 @@
     network_mode: bridge
     networks:
       - name: "{{ docker_network }}"
+    volumes:
+      - "{{ docker_authentik_mount_redis }}:/data"
     restart_policy: unless-stopped
     state: present
 

@@ -1,6 +1,7 @@
 ---
 docker_authentik_data_basepath: "{{ docker_data_basepath }}/authentik"
 docker_authentik_mount_postgresql: "{{ docker_authentik_data_basepath }}/postgresql"
+docker_authentik_mount_redis: "{{ docker_authentik_data_basepath }}/redis"
 docker_authentik_mount_backups: "{{ docker_authentik_data_basepath }}/backups"
 docker_authentik_mount_media: "{{ docker_authentik_data_basepath }}/media"
 docker_authentik_mount_certs: "{{ docker_authentik_data_basepath }}/certs"
