@@ -1,0 +1,12 @@
+---
+docker_loki_basepath: "{{ docker_data_basepath }}/loki"
+docker_loki_mount_data: "{{ docker_loki_basepath }}/data"
+docker_loki_mount_config: "{{ docker_loki_basepath }}/config"
+
+docker_loki_name: loki
+docker_loki_image: 'grafana/loki:2.4.2'
+
+docker_loki_proxy_hostname: "loki.{{ acme_domain }}"
+
+docker_loki_admin: "admin"
+docker_loki_password: "changeme!"

@@ -1,0 +1,19 @@
+---
+- name: Create Loki folders
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+  with_items:
+    - "{{ docker_loki_mount_data }}"
+    - "{{ docker_loki_mount_config }}"
+
+- name: Copy Loki config
+  template:
+    src: "local-config.yaml.j2"
+    dest: "{{ docker_loki_mount_config }}/local-config.yaml"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
