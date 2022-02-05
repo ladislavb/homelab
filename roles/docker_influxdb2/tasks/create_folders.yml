@@ -1,0 +1,12 @@
+---
+- name: Creating data folder
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+  with_items:
+    - "{{ docker_influxdb2_mount_config }}"
+    - "{{ docker_influxdb2_mount_data }}"

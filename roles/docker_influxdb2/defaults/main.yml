@@ -1,0 +1,16 @@
+---
+docker_influxdb2_basepath: "{{ docker_data_basepath }}/influxdb2"
+docker_influxdb2_mount_data: "{{ docker_influxdb2_basepath }}/data"
+docker_influxdb2_mount_config: "{{ docker_influxdb2_basepath }}/config"
+
+docker_influxdb2_name: influxdb2
+docker_influxdb2_image: 'influxdb:2.1.1'
+
+docker_influxdb2_proxy_hostname: "influxdb2.{{ acme_domain }}"
+
+docker_influxdb2_admin: "admin"
+docker_influxdb2_password: "changeme!"
+docker_influxdb2_admin_token: "changeme!"
+docker_influxdb2_org: "ACME"
+docker_influxdb2_bucket: "homelab"
+docker_influxdb2_retention: "14d"
