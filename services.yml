@@ -79,8 +79,8 @@
   roles:
     - role: samba_client
       tags: [ samba_client ]
-    - role: docker_dashboard
-      tags: [ dashboard ]
+    - role: docker_homer
+      tags: [ homer ]
     - role: docker_openhab2
       tags: [ openhab2 ]
     - role: docker_authentik

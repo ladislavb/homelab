@@ -1,0 +1,15 @@
+---
+- name: Create Homer config folder
+  file:
+    path: "{{ docker_homer_mount_config }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+
+- name: Configure Homer
+  template:
+    src: "config.yml.j2"
+    dest: "{{ docker_homer_mount_config }}/config.yml"
+    mode: 0775
