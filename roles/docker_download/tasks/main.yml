@@ -1,0 +1,8 @@
+---
+- include: create_folders.yml
+- include: transmission.yml
+- include: jackett.yml
+- include: sonarr.yml
+- include: radarr.yml
+- include: lidarr.yml
+- include: bazarr.yml

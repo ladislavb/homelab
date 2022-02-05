@@ -1,0 +1,47 @@
+---
+# -------------------------------------------------------------------------------------------------
+# Download station
+# -------------------------------------------------------------------------------------------------
+
+docker_downlaod_data_basepath: "{{ docker_data_basepath }}/download"
+docker_download_mount_media: "/srv/media"
+
+docker_torrent_name: transmission-openvpn
+docker_torrent_image: 'haugene/transmission-openvpn'
+docker_torrent_memory: "512m"
+docker_torrent_mount_config: "{{ docker_downlaod_data_basepath }}/transmission"
+docker_torrent_openvpn_provider: 'NORDVPN'
+docker_torrent_openvpn_username: 'nobody@acme.com'
+docker_torrent_openvpn_password: 'changeme!'
+docker_torrent_local_network: '192.168.0.1/24'
+docker_torrent_proxy_hostname: "torrent.{{ acme_domain }}"
+
+docker_jackett_name: jackett
+docker_jackett_image: 'linuxserver/jackett'
+docker_jackett_memory: "256m"
+docker_jackett_mount_config: "{{ docker_downlaod_data_basepath }}/jackett"
+docker_jackett_proxy_hostname: "jackett.{{ acme_domain }}"
+
+docker_sonarr_name: sonarr
+docker_sonarr_image: 'linuxserver/sonarr'
+docker_sonarr_memory: "384m"
+docker_sonarr_mount_config: "{{ docker_downlaod_data_basepath }}/sonarr"
+docker_sonarr_proxy_hostname: "sonarr.{{ acme_domain }}"
+
+docker_radarr_name: radarr
+docker_radarr_image: 'linuxserver/radarr'
+docker_radarr_memory: "384m"
+docker_radarr_mount_config: "{{ docker_downlaod_data_basepath }}/radarr"
+docker_radarr_proxy_hostname: "radarr.{{ acme_domain }}"
+
+docker_lidarr_name: lidarr
+docker_lidarr_image: 'linuxserver/lidarr'
+docker_lidarr_memory: "384m"
+docker_lidarr_mount_config: "{{ docker_downlaod_data_basepath }}/lidarr"
+docker_lidarr_proxy_hostname: "lidarr.{{ acme_domain }}"
+
+docker_bazarr_name: bazarr
+docker_bazarr_image: 'linuxserver/bazarr'
+docker_bazarr_memory: "256m"
+docker_bazarr_mount_config: "{{ docker_downlaod_data_basepath }}/bazarr"
+docker_bazarr_proxy_hostname: "bazarr.{{ acme_domain }}"

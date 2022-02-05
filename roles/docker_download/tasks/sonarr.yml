@@ -1,0 +1,41 @@
+---
+- name: Create Sonarr container
+  docker_container:
+    docker_host: unix://var/run/docker.sock
+    detach: yes
+    name: "{{ docker_sonarr_name }}"
+    image: "{{ docker_sonarr_image }}"
+    pull: yes
+    recreate: yes
+    container_default_behavior: "no_defaults"
+    memory: "{{ docker_sonarr_memory }}"
+    log_driver: fluentd
+    log_options:
+      tag: "log.local.docker.{{ docker_sonarr_name }}"
+      fluentd-async: "true"
+    network_mode: bridge
+    networks:
+      - name: "{{ docker_network }}"
+    networks_cli_compatible: yes
+    env:
+        TZ: "{{ homelab_timezone }}"
+        UMASK_SET: "022"
+        PUID: "{{ docker_uid }}"
+        PGID: "{{ docker_gid }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.sonarr.entrypoints: "websecure"
+      traefik.http.routers.sonarr.rule: "Host(`{{ docker_sonarr_proxy_hostname }}`)"
+      traefik.http.routers.sonarr.tls: "true"
+      traefik.http.routers.sonarr.tls.certresolver: "le"
+    volumes:
+      - "{{ docker_sonarr_mount_config }}:/config"
+      - "{{ docker_download_mount_media }}:/data"
+    restart_policy: unless-stopped
+    state: present
+
+- name: Start Sonarr
+  docker_container:
+    name: "{{ docker_sonarr_name }}"
+    container_default_behavior: "no_defaults"
+    state: started
