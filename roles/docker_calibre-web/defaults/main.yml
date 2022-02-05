@@ -4,9 +4,9 @@
 # -------------------------------------------------------------------------------------------------
 
 docker_calibreweb_name: calibre-web
-docker_calibreweb_image: 'linuxserver/calibre-web:version-0.6.12'
+docker_calibreweb_image: 'linuxserver/calibre-web'
 docker_calibreweb_memory: "256m"
-docker_calibreweb_mount_config: "{{ docker_data_basepath }}/calibre-web"
-docker_calibreweb_mount_media: "/srv/media/Books"
+docker_calibreweb_mount_config: "{{ docker_data_basepath }}/calibre-web/config"
+docker_calibreweb_mount_media: "{{ docker_data_basepath }}/calibre-web/books"
 docker_calibreweb_proxy_hostname: "calibre.{{ acme_domain }}"
 docker_calibreweb_admin_password: "changeme!"

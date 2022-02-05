@@ -91,8 +91,8 @@
       tags: [ loki, soc ]
     - role: docker_grafana
       tags: [ grafana, soc ]
-    - role: docker_calibreweb
-      tags: [ calibreweb ]
+    - role: docker_calibre-web
+      tags: [ calibre-web ]
     - role: docker_photoprism
       tags: [ photoprism ]
 
