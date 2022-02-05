@@ -10,21 +10,21 @@ docker_authentik_mount_geoip: "{{ docker_authentik_data_basepath }}/geoip"
 docker_authentik_secret_key: "changeme!"
 docker_authentik_admin_password: "changeme!"
 
-docker_authentik_postgresql_name: "authentik_postgresql"
+docker_authentik_postgresql_name: "authentik-postgresql"
 docker_authentik_postgresql_image: 'postgres:12'
 docker_authentik_postgresql_user: "authentik"
 docker_authentik_postgresql_password: "changeme!"
 docker_authentik_postgresql_db: "authentik"
 
-docker_authentik_redis_name: "authentik_redis"
+docker_authentik_redis_name: "authentik-redis"
 docker_authentik_redis_image: "redis:alpine"
 
-docker_authentik_server_name: "authentik_server"
+docker_authentik_server_name: "authentik-server"
 docker_authentik_server_image: "beryju/authentik:2022.1.4"
 docker_authentik_server_proxy_hostname: "login.{{ acme_domain }}"
 
-docker_authentik_worker_name: "authentik_worker"
+docker_authentik_worker_name: "authentik-worker"
 docker_authentik_worker_image: "beryju/authentik:2022.1.4"
 
-docker_authentik_geoipupdate_name: "authentik_geoipupdate"
+docker_authentik_geoipupdate_name: "authentik-geoipupdate"
 docker_authentik_geoipupdate_image: "maxmindinc/geoipupdate:latest"
