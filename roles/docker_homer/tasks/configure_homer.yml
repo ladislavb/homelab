@@ -13,3 +13,8 @@
     src: "config.yml.j2"
     dest: "{{ docker_homer_mount_config }}/config.yml"
     mode: 0775
+
+- name: Copy custom.css
+  copy: 
+    src: custom.css
+    dest: "{{ docker_homer_mount_config }}/custom.css"
