@@ -1,0 +1,13 @@
+---
+- name: Create conf directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    recurse: yes
+  with_items:
+    - "{{ docker_openhab3_mount_conf }}"
+    - "{{ docker_openhab3_mount_userdata }}"
+    - "{{ docker_openhab3_mount_addons }}"
