@@ -1,0 +1,10 @@
+---
+docker_navidrome_data_basepath: "{{ docker_data_basepath }}/navidrome"
+docker_navidrome_mount_data: "{{ docker_navidrome_data_basepath }}/data"
+docker_navidrome_mount_music: "/srv/media/Music"
+
+docker_navidrome_name: navidrome
+docker_navidrome_image: 'deluan/navidrome:latest'
+docker_navidrome_memory: "64m"
+
+docker_navidrome_proxy_hostname: "audio.{{ acme_domain }}"
