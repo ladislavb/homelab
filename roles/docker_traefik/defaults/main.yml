@@ -8,5 +8,5 @@ docker_traefik_mount_acme_json: "{{ docker_traefik_basepath }}/acme.json"
 
 docker_traefik_proxy_hostname: "{{ inventory_hostname }}"
 
-docker_traefik_admin: "traefik"
+docker_traefik_admin: "admin"
 docker_traefik_password: "changeme!"
