@@ -11,6 +11,7 @@
           - python3-passlib
           - python3-cryptography
           - ansible
+          - net-tools
           - openssl
           - wget
           - socat
@@ -19,9 +20,7 @@
           - dnsutils
           - mc
           - curl
-          - unattended-upgrades
           - parted
-          - ufw
         state: present
         update_cache: yes
 
