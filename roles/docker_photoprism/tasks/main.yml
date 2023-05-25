@@ -1,4 +1,0 @@
----
-- include: create_folders.yml
-- include: photoprism_mariadb.yml
-- include: photoprism.yml
