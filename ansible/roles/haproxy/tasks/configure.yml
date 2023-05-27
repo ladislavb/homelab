@@ -1,0 +1,17 @@
+---
+- name: Copy haproxy.conf
+  template:
+    src: "haproxy.j2"
+    dest: "{{ haproxy_config_file }}"
+
+- name: Create ssl directory
+  file:
+    path: "{{ haproxy_ssl_path }}"
+    state: directory
+    recurse: yes
+
+- name: Restart Haproxy service
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: haproxy
