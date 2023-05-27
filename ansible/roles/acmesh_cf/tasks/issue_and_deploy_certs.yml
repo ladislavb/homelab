@@ -1,8 +1,4 @@
 ---
-- name: Constructing command to issue certificates
-  ansible.builtin.set_fact:
-    acmesh_issue_command: "/root/.acme.sh/acme.sh --issue"
-
 - name: "Are we pperating in test mode? {{ acmesh_test_mode }}"
   ansible.builtin.set_fact:
     acmesh_issue_command: "{{ acmesh_issue_command }} --test"
@@ -28,7 +24,6 @@
     mode: 0775
   with_items: "{{ acmesh_certs }}"
   when: acmesh_certs | length > 0
-  failed_when: acme_issue_result.rc == 1
 
 - name: Deploying certificates
   shell: |

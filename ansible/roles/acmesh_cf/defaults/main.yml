@@ -5,6 +5,7 @@ acmesh_email: "some@example.com"
 acmesh_dns_cf_account: "Cloudflare account"
 acmesh_dns_cf_token: "Cloudflare token"
 
+acmesh_issue_command: "/root/.acme.sh/acme.sh --issue -k 2048"
 acmesh_test_mode: "true"
 
 acmesh_certs: []
