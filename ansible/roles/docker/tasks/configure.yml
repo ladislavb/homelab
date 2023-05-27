@@ -1,3 +1,4 @@
+---
 - name: Adding group
   group:
     gid: "{{ docker_group_gid }}"
