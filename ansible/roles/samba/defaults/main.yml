@@ -1,0 +1,37 @@
+---
+samba_configuration_dir: "/etc/samba"
+samba_configuration: "{{ samba_configuration_dir }}/smb.conf"
+samba_username_map_file: "{{ samba_configuration_dir }}/smbusers"
+
+samba_services:
+  - smbd
+  - nmbd
+
+samba_log: /var/log/samba/samba.log
+samba_log_size: 5000
+samba_log_level: "1 auth_audit:3"
+
+samba_workgroup: 'WORKGROUP'
+samba_server_string: "{{ inventory_hostname }}"
+
+samba_shares_root: "/mnt/nas/shares"
+
+samba_shares: []
+# Example:
+# samba_shares:
+#   - name: temp
+#     comment: 'Temporary'
+#     valid_users: +homelab
+#     write_list: +homelab
+#   - name: user1
+#     comment: 'user1 share'
+#     valid_users: user1
+#     write_list: user1
+
+samba_users: []
+# Example:
+# samba_users:
+#   - name: user1
+#     password: password1
+#   - name: user2
+#     password: password2
