@@ -1,0 +1,10 @@
+ufw_state: enabled # enabled | disabled
+
+ufw_default_incoming_policy: deny # allow | reject | deny
+ufw_default_outgoing_policy: allow # allow | reject | deny
+
+ufw_default_rules:
+  - rule: limit
+    to_port: 22
+
+ufw_custom_rules: []

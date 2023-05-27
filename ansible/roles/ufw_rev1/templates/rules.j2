@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+# Default incoming policy
+{{ ufw_default_incoming_policy }}
+
+# Default outgoing policy
+{{ ufw_default_outgoing_policy }}
+
+# Default rules
+{{ ufw_default_rules | to_nice_json }}
+
+# Custom rules
+{{ ufw_custom_rules | to_nice_json }}
