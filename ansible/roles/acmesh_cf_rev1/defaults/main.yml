@@ -1,0 +1,16 @@
+---
+acmesh_dir: "/etc/ssl/acme.sh"
+
+acmesh_email: "some@example.com"
+acmesh_dns_cf_account: "Cloudflare account"
+acmesh_dns_cf_token: "Cloudflare token"
+
+acmesh_test_mode: "true"
+
+acmesh_certs: []
+# Example:
+# acmesh_certs:
+#   - subject: "example.com"
+#     domains: "example.com,*.example.com"
+#     reload_command: |
+#       service nginx reload

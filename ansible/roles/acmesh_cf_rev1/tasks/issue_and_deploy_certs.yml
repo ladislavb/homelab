@@ -1,0 +1,45 @@
+---
+- name: Constructing command to issue certificates
+  ansible.builtin.set_fact:
+    acmesh_issue_command: "/root/.acme.sh/acme.sh --issue"
+
+- name: "Are we pperating in test mode? {{ acmesh_test_mode }}"
+  ansible.builtin.set_fact:
+    acmesh_issue_command: "{{ acmesh_issue_command }} --test"
+  when: acmesh_test_mode | bool
+
+- name: Issuing certificates
+  shell: "{{ acmesh_issue_command }} --dns dns_cf -d {{ item.domains | split(',') | map('trim') | join(' -d ') }}"
+  environment:
+    CF_Token: "{{ acmesh_dns_cf_token }}"
+    CF_Account_ID: "{{ acmesh_dns_cf_account }}"
+  args:
+    creates: /root/.acme.sh/{{ item.subject }}/ca.cer
+    warn: false
+  with_items: "{{ acmesh_certs }}"
+  register: acme_issue_result
+  when: acmesh_certs | length > 0
+  failed_when: acme_issue_result.rc == 1
+
+- name: Deploying reload scripts for each certificate
+  template:
+    src: "reload_script.j2"
+    dest: "{{ acmesh_dir }}/{{ item.subject }}_reload.sh"
+    mode: 0775
+  with_items: "{{ acmesh_certs }}"
+  when: acmesh_certs | length > 0
+  failed_when: acme_issue_result.rc == 1
+
+- name: Deploying certificates
+  shell: |
+    /root/.acme.sh/acme.sh --install-cert \
+      -d {{ item.domains | split(',') | map('trim') | join(' -d ') }} \
+      --fullchain-file {{ acmesh_dir }}/{{ item.subject }}_fullchain.pem \
+      --key-file       {{ acmesh_dir }}/{{ item.subject }}_key.pem \
+      --reloadcmd     {{ acmesh_dir }}/{{ item.subject }}_reload.sh
+  args:
+    warn: false
+  with_items: "{{ acmesh_certs }}"
+  register: acme_install_result
+  when: acmesh_certs | length > 0
+  failed_when: acme_install_result.rc != 0

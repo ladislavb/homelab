@@ -1,4 +1,0 @@
----
-acmesh_dir: "/etc/ssl/acme.sh"
-acmesh_reload_template: "default"
-acmesh_pfx_password: "changeme!"

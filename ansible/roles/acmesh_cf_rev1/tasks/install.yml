@@ -1,0 +1,12 @@
+---
+- name: Installing acme.sh
+  shell: wget -O - https://get.acme.sh | sh -s email={{ acme_email }}
+  args:
+    creates: "/root/.acme.sh"
+    warn: False
+
+- name: Enabling auto upgrade for acme.sh
+  lineinfile:
+    dest: /root/.acme.sh/account.conf
+    regexp: "^#?AUTO_UPGRADE"
+    line: 'AUTO_UPGRADE="1"'

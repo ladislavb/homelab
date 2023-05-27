@@ -1,0 +1,6 @@
+---
+- name: Create ssl directory
+  file:
+    path: "{{ acmesh_dir }}"
+    state: directory
+    recurse: yes

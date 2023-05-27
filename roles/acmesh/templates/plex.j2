@@ -1,5 +1,0 @@
-#!/bin/sh
-/root/.acme.sh/acme.sh --toPkcs -d "{{ acme_domain }}" -d "*.{{ acme_domain }}" --password "{{ acmesh_pfx_password }}" 
-cp /root/.acme.sh/{{ acme_domain }}/{{ acme_domain }}.pfx /var/lib/plexmediaserver/{{ acme_domain }}.pfx
-chown plex:plex /var/lib/plexmediaserver/{{ acme_domain }}.pfx
-systemctl restart plexmediaserver
