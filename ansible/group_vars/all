@@ -1,0 +1,18 @@
+---
+ansible_ssh_user: "homelab"
+ansible_become: yes
+
+system_timezone: "Europe/Prague"
+
+system_user: "homelab"
+system_user_uid: "1000"
+system_user_home: "/home/{{ system_user }}"
+system_group: "homelab"
+system_group_gid: "1000"
+
+docker_user: "{{ system_user }}"
+docker_uid: "{{ system_user_uid }}"
+docker_group: "{{ system_group }}"
+docker_gid: "{{ system_group_gid }}"
+docker_data_basepath: "/opt/homelab/docker"
+docker_network: "homelab_net"
