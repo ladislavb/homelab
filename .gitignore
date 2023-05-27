@@ -1,5 +1,8 @@
 .DS_Store
 .vscode
-inventory.yml
-group_vars/grp_*
-host_vars/*
+*.log
+terraform/.terraform
+terraform/*.tfplan
+terraform/*.hcl
+ansible/group_vars/grp_*
+ansible/host_vars/*
