@@ -1,0 +1,48 @@
+---
+# -------------------------------------------------------------------------------------------------
+# Homelab dashboard
+# -------------------------------------------------------------------------------------------------
+
+docker_homer_name: homer
+docker_homer_image: 'b4bz/homer'
+docker_homer_memory: "32m"
+docker_homer_mount_config: "{{ docker_data_basepath }}/homer"
+docker_homer_proxy_hostname: "homer.{{ acme_domain }}"
+
+docker_homer_title: "Homelab"
+docker_homer_subtitle: "Home services"
+docker_homer_icon: "fas fa-home"
+
+docker_homer_navbar_links:
+  - name: "Wiki"
+    icon: "fas fa-book"
+    url: "https://wiki.acme.com"
+
+docker_services: []
+# Example:
+# docker_homer_services:
+#   - name: "Multimedia"
+#     icon: "fas fa-couch"
+#     items: 
+#       - name: "Media Player"
+#         icon: "fas fa-play"
+#         subtitle: "Plex"
+#         tag: "app"
+#         tagstyle: "is-small is-primary"
+#         url: "https://plex.acme.com"
+#         target: "_blank"
+#       - name: "Books"
+#         icon: "fas fa-book"
+#         subtitle: "Calibre-Web"
+#         tag: "app"
+#         url: "https://books.acme.com"
+#         target: "_blank"
+#   - name: "Download"
+#     icon: "fas fa-download"
+#     items: 
+#       - name: "TV"
+#         icon: "fas fa-tv"
+#         subtitle: "Sonarr"
+#         tag: "app"
+#         url: "https://sonarr.acme.com"
+#         target: "_blank"

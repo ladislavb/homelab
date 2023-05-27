@@ -1,0 +1,3 @@
+---
+- import_tasks: configure_homer.yml
+- import_tasks: container_homer.yml
