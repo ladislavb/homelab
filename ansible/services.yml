@@ -1,0 +1,82 @@
+# -------------------------------------------------------------------------------------------------
+# Groups
+# -------------------------------------------------------------------------------------------------
+
+- hosts: grp_rpi:grp_vm:grp_lxc:grp_cloud_vps
+  roles:
+    - role: ufw
+      tags: [ ufw ]
+    #- role: logging
+    #  tags: [ logging ]
+
+- hosts: grp_acmesh
+  roles:
+    - role: acmesh_cf
+      tags: [ acmesh ]
+
+- hosts: grp_haproxy
+  roles:
+    - role: haproxy
+      tags: [ haproxy ]
+
+- hosts: grp_samba
+  roles:
+    - role: samba
+      tags: [ samba ]
+
+- hosts: grp_samba_client
+  roles:
+    - role: samba_client
+      tags: [ samba_client ]
+
+- hosts: grp_docker
+  roles:
+    - role: docker
+      tags: [ docker ]
+
+- hosts: grp_docker_traefik
+  roles:
+    - role: docker_traefik
+      tags: [ traefik ]
+
+- hosts: grp_test
+  roles:
+    - role: ufw
+      tags: [ ufw ]
+    - role: acmesh_cf
+      tags: [ acmesh ]
+
+# -------------------------------------------------------------------------------------------------
+# Hosts
+# -------------------------------------------------------------------------------------------------
+
+- hosts: kirk.blazcata.cz
+  roles:
+    - role: docker_download
+      tags: [ download ]
+    - role: docker_openhab3
+      tags: [ openhab3 ]
+
+- hosts: picard.blazcata.cz
+  roles:
+    - role: docker_homer
+      tags: [ homer ]
+    - role: docker_openhab2
+      tags: [ openhab2 ]
+    - role: docker_influxdb2
+      tags: [ influxdb2, soc ]
+    - role: docker_loki
+      tags: [ loki, soc ]
+    - role: docker_grafana
+      tags: [ grafana, soc ]
+    - role: docker_calibre-web
+      tags: [ calibre-web ]
+    - role: docker_navidrome
+      tags: [ navidrome ]
+    - role: docker_bonob
+      tags: [ bonob ]
+
+- hosts: spock.blazcata.cz
+  roles:
+    - role: plex
+      tags: [ plex ]
