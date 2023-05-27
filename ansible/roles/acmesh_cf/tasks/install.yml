@@ -1,6 +1,6 @@
 ---
 - name: Installing acme.sh
-  shell: wget -O - https://get.acme.sh | sh -s email={{ acme_email }}
+  shell: wget -O - https://get.acme.sh | sh -s email={{ acmesh_email }}
   args:
     creates: "/root/.acme.sh"
     warn: False
