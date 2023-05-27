@@ -1,0 +1,19 @@
+---
+- name: Constructing kernel version entry
+  command: uname -r
+  register: kernel_version
+
+- name: Installing cifs-utils
+  apt:
+    pkg:
+      - cifs-utils
+    state: present
+    update_cache: yes
+
+- name: Installing kernel modules extra
+  apt:
+    pkg:
+      - "linux-modules-extra-{{ kernel_version.stdout }}"
+    state: present
+    update_cache: yes
+  when: "'grp_vm' in group_names"

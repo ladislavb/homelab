@@ -1,0 +1,8 @@
+samba_client_shares: []
+# Example
+# samba_client_shares:
+#  - name: media
+#    local_mount: "/srv/media"
+#    samba_share: "//server/media"
+#    samba_user: "changeme!"
+#    samba_password: "changeme!"
