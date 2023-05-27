@@ -1,3 +1,0 @@
----
-- include: create_folders.yml
-- include: influxdb2.yml

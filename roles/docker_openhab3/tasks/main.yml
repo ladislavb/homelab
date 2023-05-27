@@ -1,4 +1,0 @@
-- include: create_folders.yml
-- include: configure_things.yml
-- include: configure_items.yml
-- include: openhab3.yml

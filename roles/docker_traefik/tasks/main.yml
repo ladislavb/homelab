@@ -1,3 +1,0 @@
----
-- include: traefik_configuration.yml
-- include: traefik_container.yml
