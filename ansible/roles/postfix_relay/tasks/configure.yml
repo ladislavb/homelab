@@ -1,0 +1,16 @@
+---
+- name: Remove Exim
+  apt:
+    pkg:
+      - exim4-base
+      - exim4-config
+      - exim4-daemon-light
+    state: absent
+    purge: yes
+
+- name: Install Postfix
+  apt:
+    pkg:
+      - postfix
+      - libsasl2-modules
+    state: present
