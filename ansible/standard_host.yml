@@ -1,0 +1,79 @@
+---
+- hosts: grp_cloud_vps:grp_rpi:grp_vm:grp_lxc
+  gather_facts: yes
+
+  tasks:
+    - name: Installing basic software
+      apt:
+        pkg:
+          - python3-pip
+          - python3-apt
+          - python3-passlib
+          - python3-cryptography
+          - ansible
+          - net-tools
+          - openssl
+          - wget
+          - socat
+          - rsync
+          - telnet
+          - dnsutils
+          - mc
+          - curl
+          - parted
+        state: present
+        update_cache: yes
+
+    - name: Installing QEMU agent
+      apt:
+        pkg:
+          - qemu-guest-agent
+        state: present
+        update_cache: yes
+      when: "'grp_vm' in group_names"
+
+    - name: Adding group
+      group:
+        gid: "{{ system_group_gid }}"
+        name: "{{ system_group }}"
+        system: yes
+        state: present
+      when: "'grp_cloud_vps' not in group_names"
+
+    - name: Adding user
+      user:
+        comment: 'Homelab'
+        createhome: no
+        name: "{{ system_user }}"
+        home: "{{ system_user_home }}"
+        system: yes
+        uid: "{{ system_user_uid }}"
+        group: "{{ system_group }}"
+        state: present
+      when: "'grp_cloud_vps' not in group_names"
+  
+  pre_tasks:
+    - name: Removing Python2
+      raw: apt remove -y python2.7-minimal
+
+    - name: Installing Python3
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+
+    - name: Setting ansible_python_interpreter to /usr/bin/python3
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python3
+      register: python_interpreter
+
+    - name: Update locales en_US.UTF-8
+      locale_gen:
+        name: en_US.UTF-8
+        state: present
+    
+    - name: Update locales cs_CZ.UTF-8
+      locale_gen:
+        name: cs_CZ.UTF-8
+        state: present
+    
+    - name: Rebooting machine
+      reboot:
+      when: python_interpreter.changed
