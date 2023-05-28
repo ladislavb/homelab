@@ -21,6 +21,6 @@
     src: "{{ item.samba_share }}"
     path: "{{ item.local_mount }}"
     fstype: cifs
-    opts: "credentials=/root/.smb_{{ item.name }},iocharset=utf8,vers=3.0,nofail,uid={{ system_user_uid }},gid={{ system_group_gid }}"
+    opts: "credentials=/root/.smb_{{ item.name }},iocharset=utf8,vers=3.0,nofail,uid={{ item.custom_local_uid | default(samba_client_default_local_uid) }},gid={{ item.custom_local_gid | default(samba_client_default_local_gid) }}"
     state: mounted
   with_items: "{{ samba_client_shares }}"

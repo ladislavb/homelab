@@ -1,4 +1,7 @@
 ---
+samba_client_default_local_uid: "{{ system_user_uid }}"
+samba_client_default_local_gid: "{{ system_group_gid }}"
+
 samba_client_shares: []
 # Example
 # samba_client_shares:
@@ -7,3 +10,5 @@ samba_client_shares: []
 #    samba_share: "//server/media"
 #    samba_user: "changeme!"
 #    samba_password: "changeme!"
+#    # custom_local_uid: "1000" # use only when custom mapping per share is needed
+#    # custom_local_gid: "1000" # use only when custom mapping per share is needed
