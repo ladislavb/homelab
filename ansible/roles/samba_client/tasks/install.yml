@@ -9,6 +9,7 @@
       - cifs-utils
     state: present
     update_cache: yes
+    cache_valid_time: "{{ system_apt_cache_valid_time }}"
 
 - name: Installing kernel modules extra
   apt:
@@ -16,4 +17,5 @@
       - "linux-modules-extra-{{ kernel_version.stdout }}"
     state: present
     update_cache: yes
+    cache_valid_time: "{{ system_apt_cache_valid_time }}"
   when: "'grp_vm' in group_names"

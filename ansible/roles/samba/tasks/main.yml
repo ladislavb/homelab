@@ -6,6 +6,7 @@
       - avahi-daemon
     state: present
     update_cache: yes
+    cache_valid_time: "{{ system_apt_cache_valid_time }}"
 
 - name: Copy service file for SMB
   copy: 
