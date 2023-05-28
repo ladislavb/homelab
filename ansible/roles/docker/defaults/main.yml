@@ -1,7 +1,7 @@
 ---
-docker_user: "ansible_docker"
-docker_uid: "9000"
-docker_group: "ansible_docker"
-docker_gid: "9000"
-docker_data_basepath: "/opt/ansible_managed/docker"
-docker_network: "ansible_net"
+docker_user: "homelab_docker"
+docker_user_uid: "9000"
+docker_group: "homelab_docker"
+docker_group_gid: "9000"
+docker_data_basepath: "/opt/homelab/docker"
+docker_network: "homelab_net"

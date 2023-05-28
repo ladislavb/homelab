@@ -1,5 +1,5 @@
 ---
-- name: Removing old docker versions
+- name: Remove old docker versions
   apt:
     pkg:
       - docker 
@@ -9,7 +9,7 @@
       - runc
     state: absent
    
-- name: Installing docker-ce dependencies
+- name: Install docker-ce dependencies
   apt:
     pkg:
       - apt-transport-https
@@ -18,14 +18,16 @@
       - gnupg-agent
       - software-properties-common
     state: present
+    update_cache: yes
+    cache_valid_time: "{{ system_apt_cache_valid_time }}"
  
-- name: Adding docker key - Debian
+- name: Add docker key - Debian
   apt_key:
     url: https://download.docker.com/linux/debian/gpg
     state: present
   when: ansible_lsb.id == 'Debian'
      
-- name: Constructing docker repository entry for apt configuration - Debian
+- name: Construct docker repository entry for apt configuration - Debian
   command: bash -c "echo \"deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable\" "
   register: docker_repo_line
   when: ansible_lsb.id == 'Debian'
@@ -34,19 +36,19 @@
     msg: "{{ docker_repo_line.stdout }}"
   when: ansible_lsb.id == 'Debian'
 
-- name: Adding docker repository - Debian
+- name: Add docker repository - Debian
   apt_repository:
     repo: "{{ docker_repo_line.stdout }}"
     state: present
   when: ansible_lsb.id == 'Debian'
 
-- name: Adding docker key - Ubuntu
+- name: Add docker key - Ubuntu
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
   when: ansible_lsb.id == 'Ubuntu'
 
-- name: Constructing docker repository entry for apt configuration - Ubuntu
+- name: Construct docker repository entry for apt configuration - Ubuntu
   command: bash -c "echo \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" "
   register: docker_repo_line
   when: ansible_lsb.id == 'Ubuntu'
@@ -55,24 +57,19 @@
     msg: "{{ docker_repo_line.stdout }}"
   when: ansible_lsb.id == 'Ubuntu'
  
-- name: Adding docker repository - Ubuntu
+- name: Add docker repository - Ubuntu
   apt_repository:
     repo: "{{ docker_repo_line.stdout }}"
     state: present
   when: ansible_lsb.id == 'Ubuntu'
       
-- name: Installing docker-ce
+- name: Install docker-ce + Python packages for Docker
   apt:
     pkg:
       - docker-ce
       - docker-ce-cli
       - containerd.io
-    state: present
-    update_cache: yes
-
-- name: Installing Python packages for Docker
-  apt:
-    pkg:
       - python3-docker
     state: present
     update_cache: yes
+    cache_valid_time: "{{ system_apt_cache_valid_time }}"
