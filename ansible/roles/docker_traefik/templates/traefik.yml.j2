@@ -21,15 +21,11 @@ entryPoints:
     http:
       tls:
         certResolver: le
-        domains:
-          - main: "{{ acme_domain }}"
-            sans:
-              - "*.{{ acme_domain }}"
 
 certificatesResolvers:
   le:
     acme:
-      email: "{{ acme_email }}"
+      email: "{{ docker_traefik_acme_email }}"
       storage: acme.json
       dnsChallenge:
         provider: "cloudflare"

@@ -1,6 +1,6 @@
 ---
 docker_traefik_name: traefik
-docker_traefik_image: "traefik:v2.5"
+docker_traefik_image: "traefik:v2.10"
 
 docker_traefik_basepath: "{{ docker_data_basepath }}/traefik"
 docker_traefik_mount_traefik_yml: "{{ docker_traefik_basepath }}/traefik.yml"
@@ -10,3 +10,10 @@ docker_traefik_proxy_hostname: "{{ inventory_hostname }}"
 
 docker_traefik_admin: "admin"
 docker_traefik_password: "changeme!"
+
+docker_traefik_acme_email: "some@example.com"
+
+docker_traefik_acme_cf_api_email: "cf@email.com"
+docker_traefik_acme_cf_api_key: "api_key"
+docker_traefik_acme_cf_dns_api_token: "dns_api_token"
+docker_traefik_acme_cf_zone_api_token: "zone_api_token"
