@@ -13,4 +13,6 @@
     pkg:
       - postfix
       - libsasl2-modules
+    update_cache: yes
+    cache_valid_time: "{{ system_apt_cache_valid_time }}"
     state: present
