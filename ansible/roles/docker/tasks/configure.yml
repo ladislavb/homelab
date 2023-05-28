@@ -1,12 +1,12 @@
 ---
-- name: Adding group
+- name: Add group
   group:
     gid: "{{ docker_group_gid }}"
     name: "{{ docker_group }}"
     system: yes
     state: present
 
-- name: Adding user
+- name: Add user
   user:
     comment: 'Homelab'
     createhome: no
@@ -17,7 +17,7 @@
     group: "{{ docker_group }}"
     state: present
 
-- name: Creating docker data directory
+- name: Create docker data directory
   file:
     path: "{{ docker_data_basepath }}"
     state: directory
@@ -25,6 +25,6 @@
     group: "{{ docker_group }}"
     recurse: yes
 
-- name: Creating backend network for docker containers
+- name: Create backend network for docker containers
   docker_network:
     name: "{{ docker_network }}"
