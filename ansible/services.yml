@@ -11,7 +11,7 @@
 
 - hosts: grp_acmesh
   roles:
-    - role: acmesh_cf
+    - role: acmesh
       tags: [ acmesh ]
 
 - hosts: grp_haproxy
