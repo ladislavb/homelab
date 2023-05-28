@@ -1,15 +1,17 @@
 ---
-- hosts: grp_cloud_vps:grp_rpi:grp_vm:grp_lxc
+- hosts: grp_cloud_vps:grp_vm:grp_lxc:grp_rpi
   gather_facts: yes
 
   tasks:
-    - name: Installing basic software
+    - name: Install standard packages
       apt:
         pkg:
           - python3-pip
           - python3-apt
           - python3-passlib
           - python3-cryptography
+          - apt-transport-https
+          - ca-certificates
           - ansible
           - net-tools
           - openssl
@@ -21,10 +23,12 @@
           - mc
           - curl
           - parted
+          - resolvconf
         state: present
         update_cache: yes
+        cache_valid_time: "{{ system_apt_cache_valid_time }}"
 
-    - name: Installing QEMU agent
+    - name: Install QEMU agent on VM
       apt:
         pkg:
           - qemu-guest-agent
@@ -32,15 +36,15 @@
         update_cache: yes
       when: "'grp_vm' in group_names"
 
-    - name: Adding group
+    - name: Add group
       group:
         gid: "{{ system_group_gid }}"
         name: "{{ system_group }}"
         system: yes
         state: present
-      when: "'grp_cloud_vps' not in group_names"
+      #when: "'grp_cloud_vps' not in group_names"
 
-    - name: Adding user
+    - name: Add user
       user:
         comment: 'Homelab'
         createhome: no
@@ -50,16 +54,16 @@
         uid: "{{ system_user_uid }}"
         group: "{{ system_group }}"
         state: present
-      when: "'grp_cloud_vps' not in group_names"
+      #when: "'grp_cloud_vps' not in group_names"
   
   pre_tasks:
-    - name: Removing Python2
+    - name: Remove Python2
       raw: apt remove -y python2.7-minimal
 
-    - name: Installing Python3
+    - name: Install Python3
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
 
-    - name: Setting ansible_python_interpreter to /usr/bin/python3
+    - name: Set ansible_python_interpreter to /usr/bin/python3
       set_fact:
         ansible_python_interpreter: /usr/bin/python3
       register: python_interpreter
@@ -74,6 +78,5 @@
         name: cs_CZ.UTF-8
         state: present
     
-    - name: Rebooting machine
+    - name: Reboot machine
       reboot:
-      when: python_interpreter.changed

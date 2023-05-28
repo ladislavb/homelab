@@ -3,6 +3,7 @@ ansible_ssh_user: "homelab"
 ansible_become: yes
 
 system_timezone: "Europe/Prague"
+system_apt_cache_valid_time: 3600
 
 system_user: "homelab"
 system_user_uid: "1000"
