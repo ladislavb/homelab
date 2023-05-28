@@ -19,7 +19,7 @@
     - role: haproxy
       tags: [ haproxy ]
 
-- hosts: grp_samba
+- hosts: grp_samba_server
   roles:
     - role: samba
       tags: [ samba ]
@@ -43,7 +43,7 @@
   roles:
     - role: ufw
       tags: [ ufw ]
-    - role: acmesh_cf
+    - role: acmesh
       tags: [ acmesh ]
 
 # -------------------------------------------------------------------------------------------------
