@@ -1,6 +1,7 @@
 .DS_Store
 .vscode
 *.log
+*.ignore
 terraform/.terraform
 terraform/*.tfplan
 terraform/*.hcl
