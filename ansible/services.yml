@@ -69,12 +69,6 @@
       tags: [ loki, soc ]
     - role: docker_grafana
       tags: [ grafana, soc ]
-    - role: docker_calibre-web
-      tags: [ calibre-web ]
-    - role: docker_navidrome
-      tags: [ navidrome ]
-    - role: docker_bonob
-      tags: [ bonob ]
 
 - hosts: spock.blazcata.cz
   roles:
