@@ -58,9 +58,6 @@
       #when: "'grp_cloud_vps' not in group_names"
   
   pre_tasks:
-    - name: Remove Python2
-      raw: apt remove -y python2.7-minimal
-
     - name: Install Python3
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
 
