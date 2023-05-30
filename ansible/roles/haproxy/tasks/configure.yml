@@ -10,6 +10,33 @@
     state: directory
     recurse: yes
 
+- name: Generate an OpenSSL private key
+  openssl_privatekey:
+    path: "{{ haproxy_ssl_path }}/selfsigned.key"
+
+- name: Construct certificate SAN extension
+  set_fact:
+    aliases_selfsigned: "DNS:{{ system_domain }},DNS:*.{{ system_domain }}"
+
+- name: Generate an OpenSSL CSR
+  openssl_csr:
+    path: "{{ haproxy_ssl_path }}/selfsigned.csr"
+    privatekey_path: "{{ haproxy_ssl_path }}/selfsigned.key"
+    common_name: "{{ system_domain }}"
+    subject_alt_name: "{{ aliases_selfsigned }}"
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "{{ haproxy_ssl_path }}/selfsigned"
+    privatekey_path: "{{ haproxy_ssl_path }}/selfsigned.key"
+    csr_path: "{{ haproxy_ssl_path }}/selfsigned.csr"
+    provider: selfsigned
+
+- name: Delete CSR
+  file:
+    path: "{{ haproxy_ssl_path }}/selfsigned.csr"
+    state: absent
+
 - name: Restart Haproxy service
   ansible.builtin.systemd:
     state: restarted
