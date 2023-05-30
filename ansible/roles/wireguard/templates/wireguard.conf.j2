@@ -1,0 +1,17 @@
+[Interface]
+Address = {{ wireguard_ip }}
+ListenPort = {{ wireguard_port }}
+PrivateKey = {{ wireguard_privatekey['content'] | b64decode }}
+{% if wireguard_dns is defined %}
+DNS = {{ wireguard_dns }}
+{% endif %}
+
+{% if wireguard_peers|length > 0 %}
+{% for item in wireguard_peers %}
+[Peer]
+PublicKey = {{ item.publickey }}
+AllowedIPs = {{ item.allowed_ips }}
+{% if item.endpoint is defined %}Endpoint = {{ item.endpoint }}{% endif %}
+{% if item.persistent_keep_alive is defined %}PersistentKeepalive = {{ item.persistent_keep_alive }}{% endif %}
+{% endfor %}
+{% endif %}

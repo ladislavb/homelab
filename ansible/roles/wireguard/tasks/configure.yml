@@ -1,0 +1,55 @@
+---
+- name: Enable packet forwording for IPv4
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Enable WireGuard kernel module
+  modprobe:
+    name: wireguard
+    state: present
+  register: wireguard_module_enabled
+  until:  wireguard_module_enabled is succeeded
+  retries: 10
+  delay: 10
+  failed_when: wireguard_module_enabled is failure
+
+- name: Register if private key already exists on target host
+  stat:
+    path: "{{ wireguard_config_directory }}/privatekey"
+  register: wireguard_register_privatekey
+
+- name: Generate WireGuard private and public keys
+  shell: umask 077 && wg genkey | tee {{ wireguard_config_directory }}/privatekey | wg pubkey > {{ wireguard_config_directory }}/publickey
+  when: not wireguard_register_privatekey.stat.exists
+
+- name: Register private key as a variable
+  slurp:
+    src: "{{ wireguard_config_directory }}/privatekey"
+  register: wireguard_privatekey
+
+- name: Register public key as a variable
+  slurp:
+    src: "{{ wireguard_config_directory }}/publickey"
+  register: wireguard_publickey
+
+- name: Display publc key
+  debug:
+    msg: "Public key: {{ wireguard_publickey['content'] | b64decode }}"
+
+- name: Generate WireGuard configuration file
+  template:
+    src: wireguard.conf.j2
+    dest: "{{ wireguard_config_directory }}/wg0.conf"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Start and enable WireGuard service
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: wg-quick@wg0

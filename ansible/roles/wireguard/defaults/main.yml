@@ -1,0 +1,11 @@
+---
+wireguard_config_directory: "/etc/wireguard"
+wireguard_interface: "wg0"
+wireguard_ip: "1.2.3.4"
+wireguard_port: "51194"
+#wireguard_dns:
+wireguard_peers: []
+# Example:
+# wireguard_peers:
+#   - publickey: ""
+#     allowed_ips: ""
