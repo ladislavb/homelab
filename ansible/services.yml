@@ -9,15 +9,15 @@
     #- role: logging
     #  tags: [ logging ]
 
-- hosts: grp_acmesh
-  roles:
-    - role: acmesh
-      tags: [ acmesh ]
-
 - hosts: grp_haproxy
   roles:
     - role: haproxy
       tags: [ haproxy ]
+
+- hosts: grp_acmesh
+  roles:
+    - role: acmesh
+      tags: [ acmesh ]
 
 - hosts: grp_samba_server
   roles:
@@ -74,3 +74,8 @@
   roles:
     - role: plex
       tags: [ plex ]
+
+- hosts: gw.blazcata.cz
+  roles:
+    - role: wireguard
+      tags: [ wg ]
