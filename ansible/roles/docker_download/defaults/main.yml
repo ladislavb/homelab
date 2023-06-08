@@ -1,0 +1,50 @@
+---
+# -------------------------------------------------------------------------------------------------
+# Download station
+# -------------------------------------------------------------------------------------------------
+
+docker_downlaod_data_basepath: "{{ docker_data_basepath }}/download"
+docker_download_mount_media: "/srv/media"
+
+docker_gluetun_name: "gluetun"
+docker_gluetun_image: "qmcgaw/gluetun:latest"
+docker_gluetun_mount_config: "{{ docker_downlaod_data_basepath }}/gluetun"
+docker_gluetun_username: "nobody@acme.com"
+docker_gluetun_password: "changeme!"
+docker_gluetun_region: "Europe"
+
+docker_torrent_name: transmission
+docker_torrent_image: 'linuxserver/transmission:latest'
+docker_torrent_memory: "512m"
+docker_torrent_mount_config: "{{ docker_downlaod_data_basepath }}/transmission"
+docker_torrent_proxy_hostname: "torrent.{{ system_domain }}"
+
+docker_prowlarr_name: prowlarr
+docker_prowlarr_image: 'linuxserver/prowlarr:latest'
+docker_prowlarr_memory: "384m"
+docker_prowlarr_mount_config: "{{ docker_downlaod_data_basepath }}/prowlarr"
+docker_prowlarr_proxy_hostname: "prowlarr.{{ system_domain }}"
+
+docker_sonarr_name: sonarr
+docker_sonarr_image: 'linuxserver/sonarr:latest'
+docker_sonarr_memory: "384m"
+docker_sonarr_mount_config: "{{ docker_downlaod_data_basepath }}/sonarr"
+docker_sonarr_proxy_hostname: "sonarr.{{ system_domain }}"
+
+docker_radarr_name: radarr
+docker_radarr_image: 'linuxserver/radarr:latest'
+docker_radarr_memory: "384m"
+docker_radarr_mount_config: "{{ docker_downlaod_data_basepath }}/radarr"
+docker_radarr_proxy_hostname: "radarr.{{ system_domain }}"
+
+docker_lidarr_name: lidarr
+docker_lidarr_image: 'linuxserver/lidarr:latest'
+docker_lidarr_memory: "384m"
+docker_lidarr_mount_config: "{{ docker_downlaod_data_basepath }}/lidarr"
+docker_lidarr_proxy_hostname: "lidarr.{{ system_domain }}"
+
+docker_bazarr_name: bazarr
+docker_bazarr_image: 'linuxserver/bazarr:latest'
+docker_bazarr_memory: "256m"
+docker_bazarr_mount_config: "{{ docker_downlaod_data_basepath }}/bazarr"
+docker_bazarr_proxy_hostname: "bazarr.{{ system_domain }}"

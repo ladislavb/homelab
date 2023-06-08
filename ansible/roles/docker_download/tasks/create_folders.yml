@@ -1,0 +1,32 @@
+---
+- name: Determine if media directory exists
+  stat:
+    path: "{{ docker_download_mount_media }}"
+  register: media_path
+
+- name: Create media directory but don't mess with existing/mounted folder
+  file:
+    path: "{{ docker_download_mount_media }}"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0775
+    state: directory
+    recurse: yes
+  when: not media_path.stat.exists
+
+- name: Create Download station config directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_group }}"
+    mode: 0755
+    recurse: yes
+  with_items:
+    - "{{ docker_gluetun_mount_config }}"
+    - "{{ docker_torrent_mount_config }}"
+    - "{{ docker_prowlarr_mount_config }}"
+    - "{{ docker_sonarr_mount_config }}"
+    - "{{ docker_radarr_mount_config }}"
+    - "{{ docker_lidarr_mount_config }}"
+    - "{{ docker_bazarr_mount_config }}"

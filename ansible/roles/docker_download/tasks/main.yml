@@ -1,0 +1,9 @@
+---
+- import_tasks: create_folders.yml
+- import_tasks: gluetun.yml
+- import_tasks: transmission.yml
+- import_tasks: prowlarr.yml
+- import_tasks: sonarr.yml
+- import_tasks: radarr.yml
+- import_tasks: lidarr.yml
+- import_tasks: bazarr.yml
