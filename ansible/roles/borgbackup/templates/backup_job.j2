@@ -1,0 +1,83 @@
+#!/bin/sh
+
+# some helpers and error handling:
+info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+info "Initializing repository"
+
+# See the section "Passphrase notes" for more infos.
+export BORG_PASSPHRASE='{{ item.passphrase | default(borg_default_passphrase) }}'
+/usr/local/bin/borg init --encryption={{ item.encryption | default(borg_default_encryption) }} {{ item.repo }}
+
+info "Starting backup"
+
+# Backup selected directories into an archive named after
+# the machine this script is currently running on:
+
+/usr/local/bin/borg create \
+    --show-version \
+    --progress \
+    --show-rc \
+    --stats \
+    --compression {{ borg_default_compression }} \
+    --exclude-caches \
+    {{ item.repo }}::'{hostname}-{now}' \
+{% for source in item.souce_dirs %}
+    {{ source }} \
+{% endfor %}
+
+backup_exit=$?
+
+info "Pruning repository"
+
+# Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
+# archives of THIS machine. The '{hostname}-' prefix is very important to
+# limit prune's operation to this machine's archives and not apply to
+# other machines' archives also:
+
+/usr/local/bin/borg prune \
+    --list \
+    --glob-archives='{hostname}-*' \
+    --show-rc \
+    --keep-daily {{ item.keep_daily | default(borg_default_keep_daily) }} \
+    --keep-weekly {{ item.keep_weekly | default(borg_default_keep_weekly) }} \
+    --keep-monthly {{ item.keep_mothly | default(borg_default_keep_mothly) }} \
+    {{ item.repo }} \
+
+prune_exit=$?
+
+/usr/local/bin/borg compact {{ item.repo }}
+
+# use highest exit code as global exit code
+global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
+
+if [ ${global_exit} -eq 0 ]; then
+    message="Backup job {{ item.key }} on {{ inventory_hostname }} - Backup finished successfully"
+    message_title="Backup - {{ item.key }} - OK"
+    message_priority="-2"
+    info ${message}
+elif [ ${global_exit} -eq 1 ]; then
+    message="Backup job {{ item.key }} on {{ inventory_hostname }} finished with warnings"
+    message_title="Backup - {{ item.key }} - WARN"
+    message_priority="1"
+    info ${message}
+else
+    message="Backup job {{ item.key }} on {{ inventory_hostname }} finished with errors"
+    message_title="Backup - {{ item.key }} - ERR"
+    message_priority="1"
+    info ${message}
+fi
+
+{% if borg_pushover_enabled %}
+info "Sending Pushover notification"
+curl -s \
+    --form-string "token={{ borg_pushover_app_key }}" \
+    --form-string "user={{ borg_pushover_user_key }}" \
+    --form-string "title=${message_title}" \
+    --form-string "message=${message}" \
+    --form-string "priority=${message_priority}" \
+    https://api.pushover.net/1/messages.json
+{% endif %}
+
+exit ${global_exit}

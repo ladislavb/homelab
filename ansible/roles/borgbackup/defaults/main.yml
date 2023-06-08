@@ -1,0 +1,28 @@
+---
+borg_os_variant: linux64
+borg_pkg_version: '1.2.4'
+
+borg_scripts_directory: "/root/borgbackup"
+
+# Borg backup job defaults
+borg_default_encryption: "none"
+borg_default_passphrase: ""
+borg_default_compression: "auto,lz4"
+borg_default_keep_daily: "14"
+borg_default_keep_weekly: "2"
+borg_default_keep_mothly: "6"
+
+# Pushover integration
+borg_pushover_enabled: false
+borg_pushover_app_key: ""
+borg_pushover_user_key: ""
+
+# Backup jobs
+borg_backup_jobs: []
+# Example
+# borg_backup_jobs:
+#   - key: ""
+#   - souce_dirs:
+#     - ""
+#     - ""
+#   - repo: ""

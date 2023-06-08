@@ -1,0 +1,34 @@
+---
+- name: Create borg backup scripts directory
+  file:
+    state: directory
+    path: "{{ borg_scripts_directory }}"
+
+- name: Find existing borg backup skripts
+  find:
+    paths: "{{ borg_scripts_directory }}"
+    patterns: "*.sh"
+  register: files_to_delete
+
+- name: Delete existing borg backup scripts
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"
+
+- name: Deploy borg backup scripts
+  template:
+    src: "backup_job.j2"
+    dest: "{{ borg_scripts_directory }}/{{ item.key }}.sh"
+    mode: 0770
+  with_items: "{{ borg_backup_jobs }}"
+
+- name: Creates a cron files under /etc/cron.d
+  ansible.builtin.cron:
+    name: "borgbackup_{{ item.key }}"
+    minute: "{{ 59 | random(seed=(item.key)) }}"
+    hour: "*/12"
+    user: root
+    job: "{{ borg_scripts_directory }}/{{ item.key }}.sh"
+    cron_file: "borgbackup_{{ item.key }}"
+  with_items: "{{ borg_backup_jobs }}"
