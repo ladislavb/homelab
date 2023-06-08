@@ -1,8 +1,0 @@
----
-- hosts: grp_docker
-  tasks:
-    - name: Remove old image versions
-      docker_prune:
-        images: yes
-        images_filters:
-          dangling: true
