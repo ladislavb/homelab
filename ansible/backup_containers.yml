@@ -1,0 +1,55 @@
+---
+- hosts: grp_docker
+  tasks:
+    - name: Get running containers
+      docker_host_info:
+        containers: true
+      register: docker_info
+
+    - name: Stop running containers
+      docker_container:
+        name: "{{ item }}"
+        state: stopped
+      loop: "{{ docker_info.containers | map(attribute='Names.0') | map('regex_replace', '/', '') | list }}"
+
+    - name: Construct destination folder path
+      set_fact:
+        destination_path: "/srv/temp/docker/{{ inventory_hostname }}/"
+
+    - name: Create destination folder
+      file:
+        path: "{{ destination_path }}"
+        state: directory
+        recurse: yes
+
+    - name: Create a tar.gz archive of a source folder
+      archive:
+        path: "{{ docker_data_basepath }}"
+        dest: "{{ destination_path }}/backup.tar.gz"
+        format: gz
+        force_archive: true
+      delegate_to: "{{ inventory_hostname }}"
+    
+    - name: Get running containers
+      docker_host_info:
+        containers: true
+        containers_filters:
+          status: "exited"
+      register: docker_info
+
+    - name: Set exclude list
+      set_fact:
+        special_containers:
+          - "transmission"
+
+    - name: Start containers again
+      docker_container:
+        name: "{{ item }}"
+        state: started
+      loop: "{{ docker_info.containers | map(attribute='Names.0') | map('regex_replace', '/', '') | difference(special_containers) | list }}"
+
+    - name: Start containers again
+      docker_container:
+        name: "{{ item }}"
+        state: started
+      loop: "{{ docker_info.containers | map(attribute='Names.0') | map('regex_replace', '/', '') | intersect(special_containers) | list }}"
