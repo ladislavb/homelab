@@ -14,12 +14,13 @@ samba_log_level: "1 auth_audit:3"
 samba_workgroup: 'WORKGROUP'
 samba_server_string: "{{ inventory_hostname }}"
 
-samba_shares_root: "/mnt/nas/shares"
+samba_shares_root: "/mnt/disk1/shares"
 
 samba_shares: []
 # Example:
 # samba_shares:
 #   - name: temp
+#     path: "/mnt/disk2/shares/temp"
 #     comment: 'Temporary'
 #     valid_users: +homelab
 #     write_list: +homelab
